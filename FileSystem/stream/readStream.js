@@ -1,21 +1,16 @@
 const fs = require('fs');
+const http = require('http');
+const port = process.env.port || 3000;
 
-const stream = fs.ReadStream('img.png');
-
-const createStream = fs.createReadStream('img.png');
-
-stream.on("data", (buffer) => {
-    console.log(buffer);
-}).on("close", () => {
-    console.log('end');
-});
-
-
-createStream.on('data', (chunk) => {
-    console.log(chunk);
-}).on('error', (err) => {
-    console.log(err);
-})
+http.createServer((req, res) => {
+    let filename = __dirname + "/img.png";
+    const createStream = fs.createReadStream(filename);
+    createStream.on('open', () => {
+        createStream.pipe(res);
+    }).on('error', (err) => {
+        res.end(err);
+    })
+}).listen(port, () => { console.log(`listen to port ${port}`) });
 
 /*
     Benefits
