@@ -1,5 +1,7 @@
 const fs = require('fs');
 
+//
+
 const writeToFile = (file, data) => {
     fs.writeFile(file, data, (err) => {
         if (err) {
@@ -10,9 +12,13 @@ const writeToFile = (file, data) => {
     })
 }
 
-const writeToFileSync = async (file, data) => {
+const writeToFileSync = async (file, data, overwrite = true) => {
+    let flag = 'w';
+    if (!overwrite) {
+        flag = 'a';
+    }
     try {
-        fs.writeFileSync(file, data);
+        fs.writeFileSync(file, data, { encoding: 'utf8', flag });
         console.log('write sync success');
     }
     catch (err) {
